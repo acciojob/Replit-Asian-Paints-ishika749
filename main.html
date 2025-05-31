@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asian Paints Grid (All in One)</title>
+    <title>Asian Paints Grid</title>
     <style>
-        /* CSS styles embedded directly in HTML */
         body {
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-top: 50px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
         }
 
         .grid-container {
@@ -19,60 +24,86 @@
             grid-template-columns: repeat(3, 100px);
             grid-template-rows: repeat(3, 100px);
             gap: 10px;
-            border: 1px solid #ccc;
+            border: 2px solid #a0a0a0;
             padding: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .grid-item {
             width: 100px;
             height: 100px;
-            border: 1px solid #eee;
+            border: 1px solid #ddd;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 2em;
-            background-color: transparent; /* Initial state */
-            transition: background-color 0.3s ease; /* Smooth transition for color changes */
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #555;
+            background-color: transparent;
+            transition: background-color 0.4s ease;
+            cursor: pointer;
+        }
+
+        .grid-item:hover {
+            border-color: #999;
         }
 
         .controls {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            width: 300px;
-            padding: 20px;
-            border: 1px solid #eee;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            gap: 15px;
+            width: 350px;
+            padding: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background-color: #fff;
+        }
+
+        .controls label {
+            font-weight: bold;
+            color: #444;
         }
 
         .controls input[type="number"],
-        .controls input[type="text"],
-        .controls button {
-            padding: 8px;
-            font-size: 1em;
-            border-radius: 3px;
+        .controls input[type="text"] {
+            padding: 10px;
+            font-size: 1.1em;
+            border-radius: 5px;
             border: 1px solid #ccc;
+            width: calc(100% - 22px);
         }
 
         .controls button {
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
+            padding: 12px 20px;
+            font-size: 1.1em;
+            border-radius: 5px;
             border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: bold;
         }
 
-        .controls button:hover {
-            background-color: #0056b3;
+        #change_button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #change_button:hover {
+            background-color: #45a049;
         }
 
         #Reset {
-            background-color: #dc3545;
+            background-color: #f44336;
+            color: white;
         }
 
         #Reset:hover {
-            background-color: #c82333;
+            background-color: #da190b;
         }
     </style>
 </head>
@@ -93,17 +124,16 @@
 
     <div class="controls">
         <label for="block_id">Enter Block ID (1-9):</label>
-        <input type="number" id="block_id" min="1" max="9">
+        <input type="number" id="block_id" min="1" max="9" placeholder="e.g., 5">
 
-        <label for="colour_id">Enter Color:</label>
-        <input type="text" id="colour_id" placeholder="e.g., red, #FF0000">
+        <label for="colour_id">Enter Color (name or hex):</label>
+        <input type="text" id="colour_id" placeholder="e.g., blue, #FF0000">
 
         <button id="change_button">Change Color</button>
         <button id="Reset">Reset</button>
     </div>
 
     <script>
-        // JavaScript code embedded directly in HTML
         document.addEventListener('DOMContentLoaded', () => {
             const blockIdInput = document.getElementById('block_id');
             const colorIdInput = document.getElementById('colour_id');
@@ -111,34 +141,44 @@
             const resetButton = document.getElementById('Reset');
             const gridItems = document.querySelectorAll('.grid-item');
 
+            gridItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    blockIdInput.value = item.id;
+                });
+            });
+
             changeButton.addEventListener('click', () => {
                 const blockId = blockIdInput.value;
-                const color = colorIdInput.value;
+                const color = colorIdInput.value.trim();
 
-                // Reset all grid items to transparent
+                if (!blockId || !color) {
+                    alert('Please enter both a Block ID and a Color.');
+                    return;
+                }
+
+                const parsedBlockId = parseInt(blockId);
+                if (isNaN(parsedBlockId) || parsedBlockId < 1 || parsedBlockId > 9) {
+                    alert('Please enter a valid Block ID between 1 and 9.');
+                    return;
+                }
+
                 gridItems.forEach(item => {
                     item.style.backgroundColor = 'transparent';
                 });
 
-                // Change the background color of the specified grid item
                 const targetGridItem = document.getElementById(blockId);
                 if (targetGridItem) {
                     targetGridItem.style.backgroundColor = color;
-                } else {
-                    alert('Please enter a valid Block ID between 1 and 9.');
                 }
 
-                // Clear the input fields after changing color
                 blockIdInput.value = '';
                 colorIdInput.value = '';
             });
 
             resetButton.addEventListener('click', () => {
-                // Reset all grid items to transparent
                 gridItems.forEach(item => {
                     item.style.backgroundColor = 'transparent';
                 });
-                // Clear input fields
                 blockIdInput.value = '';
                 colorIdInput.value = '';
             });
