@@ -1,35 +1,148 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Test Grid</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asian Paints Grid (All in One)</title>
+    <style>
+        /* CSS styles embedded directly in HTML */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .grid-item {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            background-color: transparent; /* Initial state */
+            transition: background-color 0.3s ease; /* Smooth transition for color changes */
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .controls input[type="number"],
+        .controls input[type="text"],
+        .controls button {
+            padding: 8px;
+            font-size: 1em;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+        }
+
+        .controls button {
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+
+        .controls button:hover {
+            background-color: #0056b3;
+        }
+
+        #Reset {
+            background-color: #dc3545;
+        }
+
+        #Reset:hover {
+            background-color: #c82333;
+        }
+    </style>
 </head>
 <body>
+    <h1>Asian Paints Grid Color Changer</h1>
 
-<div id="grid-container">
-  <div id="1" class="grid-item">1</div>
-  <div id="2" class="grid-item">2</div>
-  <div id="3" class="grid-item">3</div>
-</div>
+    <div id="grid-container" class="grid-container">
+        <div class="grid-item" id="1">1</div>
+        <div class="grid-item" id="2">2</div>
+        <div class="grid-item" id="3">3</div>
+        <div class="grid-item" id="4">4</div>
+        <div class="grid-item" id="5">5</div>
+        <div class="grid-item" id="6">6</div>
+        <div class="grid-item" id="7">7</div>
+        <div class="grid-item" id="8">8</div>
+        <div class="grid-item" id="9">9</div>
+    </div>
 
-<input type="number" id="block_id" />
-<input type="text" id="colour_id" />
-<button id="change_button">Change Color</button>
+    <div class="controls">
+        <label for="block_id">Enter Block ID (1-9):</label>
+        <input type="number" id="block_id" min="1" max="9">
 
-<script>
-  document.getElementById('change_button').addEventListener('click', function() {
-    const blockId = document.getElementById('block_id').value;
-    const color = document.getElementById('colour_id').value;
-    if(blockId && color) {
-      document.querySelectorAll('.grid-item').forEach(el => el.style.backgroundColor = 'transparent');
-      const block = document.getElementById(blockId);
-      if(block) {
-        block.style.backgroundColor = color;
-      }
-    } else {
-      alert('Enter block id and color');
-    }
-  });
-</script>
+        <label for="colour_id">Enter Color:</label>
+        <input type="text" id="colour_id" placeholder="e.g., red, #FF0000">
 
+        <button id="change_button">Change Color</button>
+        <button id="Reset">Reset</button>
+    </div>
+
+    <script>
+        // JavaScript code embedded directly in HTML
+        document.addEventListener('DOMContentLoaded', () => {
+            const blockIdInput = document.getElementById('block_id');
+            const colorIdInput = document.getElementById('colour_id');
+            const changeButton = document.getElementById('change_button');
+            const resetButton = document.getElementById('Reset');
+            const gridItems = document.querySelectorAll('.grid-item');
+
+            changeButton.addEventListener('click', () => {
+                const blockId = blockIdInput.value;
+                const color = colorIdInput.value;
+
+                // Reset all grid items to transparent
+                gridItems.forEach(item => {
+                    item.style.backgroundColor = 'transparent';
+                });
+
+                // Change the background color of the specified grid item
+                const targetGridItem = document.getElementById(blockId);
+                if (targetGridItem) {
+                    targetGridItem.style.backgroundColor = color;
+                } else {
+                    alert('Please enter a valid Block ID between 1 and 9.');
+                }
+
+                // Clear the input fields after changing color
+                blockIdInput.value = '';
+                colorIdInput.value = '';
+            });
+
+            resetButton.addEventListener('click', () => {
+                // Reset all grid items to transparent
+                gridItems.forEach(item => {
+                    item.style.backgroundColor = 'transparent';
+                });
+                // Clear input fields
+                blockIdInput.value = '';
+                colorIdInput.value = '';
+            });
+        });
+    </script>
 </body>
 </html>
