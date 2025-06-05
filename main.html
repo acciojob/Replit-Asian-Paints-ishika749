@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Color Board</title>
   <style>
     * {
@@ -50,9 +50,8 @@
       });
 
       square.addEventListener('mouseout', () => {
-        setTimeout(() => {
-          square.style.backgroundColor = '#1d1d1d';
-        }, 1000);
+        // Simply revert color; CSS transition handles fade
+        square.style.backgroundColor = '#1d1d1d';
       });
 
       board.appendChild(square);
