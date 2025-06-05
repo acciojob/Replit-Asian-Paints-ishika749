@@ -1,188 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asian Paints Grid</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 50px;
-            background-color: #f4f4f4;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Board</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
-        }
+    body {
+      margin: 0;
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-template-rows: repeat(3, 100px);
-            gap: 10px;
-            border: 2px solid #a0a0a0;
-            padding: 10px;
-            margin-bottom: 30px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(40, 20px);
+      grid-template-rows: repeat(20, 20px);
+      gap: 2px;
+    }
 
-        .grid-item {
-            width: 100px;
-            height: 100px;
-            border: 1px solid #ddd;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #555;
-            background-color: transparent;
-            transition: background-color 0.4s ease;
-            cursor: pointer;
-        }
-
-        .grid-item:hover {
-            border-color: #999;
-        }
-
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 350px;
-            padding: 25px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            background-color: #fff;
-        }
-
-        .controls label {
-            font-weight: bold;
-            color: #444;
-        }
-
-        .controls input[type="number"],
-        .controls input[type="text"] {
-            padding: 10px;
-            font-size: 1.1em;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: calc(100% - 22px);
-        }
-
-        .controls button {
-            padding: 12px 20px;
-            font-size: 1.1em;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: bold;
-        }
-
-        #change_button {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        #change_button:hover {
-            background-color: #45a049;
-        }
-
-        #Reset {
-            background-color: #f44336;
-            color: white;
-        }
-
-        #Reset:hover {
-            background-color: #da190b;
-        }
-    </style>
+    .square {
+      width: 20px;
+      height: 20px;
+      background-color: #1d1d1d;
+      transition: background-color 1s ease;
+    }
+  </style>
 </head>
 <body>
-    <h1>Asian Paints Grid Color Changer</h1>
+  <div class="container" id="board"></div>
 
-    <div id="grid-container" class="grid-container">
-        <div class="grid-item" id="1">1</div>
-        <div class="grid-item" id="2">2</div>
-        <div class="grid-item" id="3">3</div>
-        <div class="grid-item" id="4">4</div>
-        <div class="grid-item" id="5">5</div>
-        <div class="grid-item" id="6">6</div>
-        <div class="grid-item" id="7">7</div>
-        <div class="grid-item" id="8">8</div>
-        <div class="grid-item" id="9">9</div>
-    </div>
+  <script>
+    const board = document.getElementById('board');
+    const colors = ['#e74c3c', '#8e44ad', '#3498db', '#e67e22', '#2ecc71'];
 
-    <div class="controls">
-        <label for="block_id">Enter Block ID (1-9):</label>
-        <input type="number" id="block_id" min="1" max="9" placeholder="e.g., 5">
+    for (let i = 0; i < 800; i++) {
+      const square = document.createElement('div');
+      square.classList.add('square');
 
-        <label for="colour_id">Enter Color (name or hex):</label>
-        <input type="text" id="colour_id" placeholder="e.g., blue, #FF0000">
+      square.addEventListener('mouseover', () => {
+        const color = getRandomColor();
+        square.style.backgroundColor = color;
+      });
 
-        <button id="change_button">Change Color</button>
-        <button id="Reset">Reset</button>
-    </div>
+      square.addEventListener('mouseout', () => {
+        setTimeout(() => {
+          square.style.backgroundColor = '#1d1d1d';
+        }, 1000);
+      });
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const blockIdInput = document.getElementById('block_id');
-            const colorIdInput = document.getElementById('colour_id');
-            const changeButton = document.getElementById('change_button');
-            const resetButton = document.getElementById('Reset');
-            const gridItems = document.querySelectorAll('.grid-item');
+      board.appendChild(square);
+    }
 
-            gridItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    blockIdInput.value = item.id;
-                });
-            });
-
-            changeButton.addEventListener('click', () => {
-                const blockId = blockIdInput.value;
-                const color = colorIdInput.value.trim();
-
-                if (!blockId || !color) {
-                    alert('Please enter both a Block ID and a Color.');
-                    return;
-                }
-
-                const parsedBlockId = parseInt(blockId);
-                if (isNaN(parsedBlockId) || parsedBlockId < 1 || parsedBlockId > 9) {
-                    alert('Please enter a valid Block ID between 1 and 9.');
-                    return;
-                }
-
-                gridItems.forEach(item => {
-                    item.style.backgroundColor = 'transparent';
-                });
-
-                const targetGridItem = document.getElementById(blockId);
-                if (targetGridItem) {
-                    targetGridItem.style.backgroundColor = color;
-                }
-
-                blockIdInput.value = '';
-                colorIdInput.value = '';
-            });
-
-            resetButton.addEventListener('click', () => {
-                gridItems.forEach(item => {
-                    item.style.backgroundColor = 'transparent';
-                });
-                blockIdInput.value = '';
-                colorIdInput.value = '';
-            });
-        });
-    </script>
+    function getRandomColor() {
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+  </script>
 </body>
 </html>
